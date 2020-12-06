@@ -2,32 +2,31 @@ package principal;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Properties;
 import java.util.Scanner;
 
-public class Lista {
+public class ListaPropiedades {
 	private String ruta=null;
 	private String contenido = null;
+	
+	File raiz = new File("test_archivo");
 
-	public Lista( ) {
-
+	public ListaPropiedades() {
+		
 	}
-	public Lista(String ruta) {
-		this.ruta=ruta;
-		establecerContenido(this.ruta);
+	
+	public Properties obtenerElementos(String ruta) throws FileNotFoundException, IOException {
+        String[] archivos = raiz.list();
+        Properties elemento = new Properties();
+        for (String archivo : archivos) {
+	        elemento.load(new FileReader(ruta+archivo));
+		}
+		return elemento;
 	}
-	public String obtnerRuta() {
-		return this.ruta;
-	}
-	public void establecerRuta(String ruta) {
-		this.ruta = ruta;
-	}
-	public String obtenerContenido() {
-		System.out.println("Tu lista: \n");
-		establecerContenido(this.ruta);
-		return this.contenido;
-	}
+	
 	public void establecerContenido(String ruta) {
 		this.contenido = "";
 		try{
@@ -42,13 +41,19 @@ public class Lista {
 			e.printStackTrace();
 		}
 	}
-	public void agregarElemento(String elemento){
-		System.out.println();
-		escribir(this.ruta,this.contenido+elemento);
-		System.out.println("elemento "+elemento+" agregado a la lista\n");
-		establecerContenido(this.ruta);
+	public String obtnerRuta() {
+		return this.ruta;
 	}
-	public void borrarElemento(String elemento){
+	public void establecerRuta(String ruta) {
+		this.ruta = ruta;
+	}
+	public void agregarElemento(Properties elemento){
+		System.out.println();
+		escribir(elemento);
+		System.out.println("elemento "+elemento+" agregado a la lista\n");
+		//establecerContenido(this.ruta);
+	}
+/*	public void borrarElemento(String elemento){
 		String contenidoNuevo = "";
 		boolean elementoBorrado = false;
 
@@ -69,7 +74,7 @@ public class Lista {
 			System.out.println("elemento no encontrado");
 		}
 		entrada.close();
-	}
+	}*/
 	public void datosDelArchivo() {
 		File archivo = new File("archivo/Lista");
 
@@ -80,14 +85,15 @@ public class Lista {
 		System.out.println("File size in bytes " + archivo.length());
 		System.out.println();
 	}
-	private static void escribir(String ruta, String contenidoNuevo) {
+	private static void escribir(Properties libro) {
+		
 		try {
-			FileWriter escritor = new FileWriter(ruta);
-			escritor.write(contenidoNuevo);
+			FileWriter escritor = new FileWriter(libro.getProperty("ruta"));
+			libro.store(escritor, "primer libro");
 			escritor.close();
-			System.out.println("Se completÃ³ la escritura en el archivo");
+			System.out.println("Se completó la escritura en el archivo");
 			}catch(IOException e) {
-			System.out.println("El archivo no se encuentra");
+			System.out.println("Error al escribir el archivo");
 			e.printStackTrace();
 		}
 	}

@@ -1,17 +1,21 @@
 package principal;
 
-public class Inventario extends Lista {
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Properties;
+
+public class Inventario extends ListaPropiedades {
 		
-	public Inventario(String ruta) {
-		super.establecerRuta(ruta);
+	public Inventario( ) {
+		
 	}
-	public void registrarLibro(String libroNuevo){
+	public void registrarLibro(Properties libroNuevo){
 		super.agregarElemento(libroNuevo);
 	}
 	public void eliminarLibro(){
 		
 	}
-	public String obtenerInventario(){
-		return super.obtenerContenido();
+	public Properties obtenerInventario() throws FileNotFoundException, IOException{
+		return super.obtenerElementos("test_archivo/");
 	}
 }
